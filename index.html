@@ -266,7 +266,9 @@
             }
             add(e){
                 var name = prompt("Name");
-                this.users.push(name)
+                if(name && name.trim()){
+                    this.users.push(name.trim())
+                }
             }
             start(e){
                 this.status = 'playing'
