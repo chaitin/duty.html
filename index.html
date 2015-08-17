@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Are You Lucky Enough?</title>
+    <script src="//cdn.bootcss.com/riot/2.2.4/riot+compiler.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Exo+2:400,200italic' rel='stylesheet' type='text/css'>
+    <style>
+    @keyframes shake-hard {
+        0% { transform: translate(0px, 0px) rotate(0deg); }
+        2% { transform: translate(-8px, -1px) rotate(0.5deg); }
+        4% { transform: translate(-3px, 3px) rotate(-2.5deg); }
+        6% { transform: translate(-4px, -2px) rotate(-2.5deg); }
+        8% { transform: translate(-8px, -5px) rotate(-3.5deg); }
+        10% { transform: translate(-2px, -10px) rotate(0.5deg); }
+        12% { transform: translate(0px, -9px) rotate(-1.5deg); }
+        14% { transform: translate(-8px, 7px) rotate(-0.5deg); }
+        16% { transform: translate(-2px, 8px) rotate(-1.5deg); }
+        18% { transform: translate(1px, 9px) rotate(1.5deg); }
+        20% { transform: translate(5px, 7px) rotate(-2.5deg); }
+        22% { transform: translate(0px, 2px) rotate(-2.5deg); }
+        24% { transform: translate(0px, 7px) rotate(-1.5deg); }
+        26% { transform: translate(-9px, 4px) rotate(-3.5deg); }
+        28% { transform: translate(3px, -1px) rotate(1.5deg); }
+        30% { transform: translate(6px, 2px) rotate(1.5deg); }
+        32% { transform: translate(-8px, -8px) rotate(-3.5deg); }
+        34% { transform: translate(9px, 5px) rotate(-1.5deg); }
+        36% { transform: translate(-2px, 7px) rotate(-0.5deg); }
+        38% { transform: translate(0px, 0px) rotate(2.5deg); }
+        40% { transform: translate(0px, -10px) rotate(-3.5deg); }
+        42% { transform: translate(3px, -4px) rotate(0.5deg); }
+        44% { transform: translate(-1px, -10px) rotate(0.5deg); }
+        46% { transform: translate(0px, 1px) rotate(2.5deg); }
+        48% { transform: translate(-1px, 1px) rotate(2.5deg); }
+        50% { transform: translate(7px, 4px) rotate(-0.5deg); }
+        52% { transform: translate(-10px, -5px) rotate(1.5deg); }
+        54% { transform: translate(-1px, 6px) rotate(-1.5deg); }
+        56% { transform: translate(-9px, 9px) rotate(-3.5deg); }
+        58% { transform: translate(8px, 2px) rotate(2.5deg); }
+        60% { transform: translate(9px, 1px) rotate(-1.5deg); }
+        62% { transform: translate(-3px, -2px) rotate(-2.5deg); }
+        64% { transform: translate(-3px, 8px) rotate(0.5deg); }
+        66% { transform: translate(-8px, 8px) rotate(0.5deg); }
+        68% { transform: translate(0px, 9px) rotate(2.5deg); }
+        70% { transform: translate(3px, -9px) rotate(2.5deg); }
+        72% { transform: translate(3px, -5px) rotate(-3.5deg); }
+        74% { transform: translate(-10px, 2px) rotate(-1.5deg); }
+        76% { transform: translate(2px, 2px) rotate(1.5deg); }
+        78% { transform: translate(2px, -3px) rotate(0.5deg); }
+        80% { transform: translate(-4px, -7px) rotate(-1.5deg); }
+        82% { transform: translate(-9px, 0px) rotate(-0.5deg); }
+        84% { transform: translate(-5px, 5px) rotate(-3.5deg); }
+        86% { transform: translate(-8px, -3px) rotate(2.5deg); }
+        88% { transform: translate(2px, -5px) rotate(-1.5deg); }
+        90% { transform: translate(-5px, 0px) rotate(-2.5deg); }
+        92% { transform: translate(1px, -5px) rotate(1.5deg); }
+        94% { transform: translate(-8px, -8px) rotate(0.5deg); }
+        96% { transform: translate(-6px, -8px) rotate(2.5deg); }
+        98% { transform: translate(1px, 0px) rotate(1.5deg); }
+    }
+    random, body, html{
+        font-family: "Exo 2", sans-serif;
+        height: 100%;
+        width: 100%;
+        margin: 0;
+    }
+    svg{
+        position: fixed;
+        top: -9999px; left: -9999px; right: -9999px; bottom: -9999px;
+        animation: roll_playing linear 10s infinite;
+        z-index: -1;
+        margin: auto;
+    }
+    @keyframes roll_before{
+        0% { transform:rotate(0); }
+        50% { transform:rotate(180deg); }
+    }
+    @keyframes roll_playing{
+        0% { transform:rotate(0); }
+        100% { transform:rotate(360deg); }
+    }
+    @keyframes fancy_fast{
+        0% { fill: #F22613; }
+        10% { fill: #DB0A5B; }
+        20% { fill: #BF55EC; }
+        30% { fill: #22A7F0; }
+        40% { fill: #87D37C; }
+        60% { fill: #FDE3A7; }
+        70% { fill: #F5AB35; }
+        80% { fill: #D35400; }
+        90% { fill: #F9690E; }
+    }
+    @keyframes fancy_fast_2{
+        0% { fill: #C82314; }
+        10% { fill: #B10A4B; }
+        20% { fill: #933AB9; }
+        30% { fill: #1D8DCB; }
+        40% { fill: #5EAA53; }
+        60% { fill: #D0BB8B; }
+        70% { fill: #CB8C28; }
+        80% { fill: #AA4909; }
+        90% { fill: #BF5411; }
+    }
+    random{
+        display: flex;
+        flex-direction:column;
+    }
+    svg path{
+        transition: fill .3s;
+    }
+    svg{
+        transition: animation-duration 1s;
+    }
+    svg.playing path:nth-of-type(2n), svg.waiting path:nth-of-type(2n){
+        animation: fancy_fast linear 10s infinite;
+    }
+    svg.playing path:nth-of-type(2n+1), svg.waiting path:nth-of-type(2n+1){
+        animation: fancy_fast_2 linear 10s infinite;
+    }
+    svg.playing{
+        animation: roll_playing linear 3s infinite;
+        animation-duration: 3s;
+    }
+    svg.finished{
+        animation: roll_playing linear 10s infinite;
+        animation-duration: 5s;
+    }
+    .user{
+        transition: transform 1s ;
+    }
+    div.finished .huge{
+      text-shadow: 0 5px 10px white;
+    }
+    </style>
+</head>
+<body>
+    <random></random>
+    <script type="riot/tag">
+        <random>
+            <svg class="{status}"></svg>
+            <div class="{status} banner">
+                <div class="wrapper">
+                    <div class={huge:true} onclick={ start }>{current}</div>
+                    <div class="number">Round {random_time}</div>
+                </div>
+            </div>
+            <div class={users:true, editing:editing} >
+                <div each={name, i in users} onclick={ parent.remove } class="user">
+                        <div>{users[i]}</div>
+                </div>
+                <div class='user' onclick={add}>
+                      <div>Add</div>
+                </div>
+            </div>
+            <style>
+                .huge{
+                    font-size: 4em;
+                    self-align: center;
+                    text-align: center;
+                    font-width: 400;
+                    cursor: pointer;
+                    align-items: center;
+                    justify-content: center;
+                    transition: font-size 3s;
+                }
+                .finished .huge{
+                    font-size: 16em;
+                }
+                .wrapper{
+                    margin: auto;
+                }
+                .wrapper:hover{
+                    animation: shake-hard 3s infinite;
+                }
+                .banner{
+                    flex: 8;
+                    display: flex;
+                }
+                .users{
+                    flex:2;
+                    margin: 0;
+                    display: -webkit-flex;
+                    display: flex;
+                    -webkit-padding-start: 0;
+                }
+                .number{
+                    font-size: 1.2em;
+                    text-align: center;
+                    font-width: 200;
+                    color: gray;
+                }
+                .users > .user{
+                    flex: 1;
+                    margin: 20px;
+                }
+                .user > div{
+                    transform: scale(1);
+                    width: 100%;
+                    padding-top: 50%;
+                    line-height: 0;
+                    padding-bottom: 50%;
+                    border-radius: 50%;
+                    height: 0;
+                    text-align: center;
+                    border: solid 1px #fff;
+                    transition: all .4s;
+                    opacity: 1;
+                }
+                .editing .user div:hover{
+                    transform: rotate(32deg)
+                }
+                .running .huge{
+                    animation: shake-hard 1s infinite;
+                }
+                .running .huge:hover{
+                    animation: shake-hard 1s infinite;
+                }
+                .hide.user > div{
+                  transform: scale(0) !important;
+                  opacity: 0;
+                }
+            </style>
+            this.status = "waiting"
+            this.editing = true;
+            this.current = "Delete three and Go"
+            this.random_time = 0;
+            this.finished = false;
+            this.on('mount', function(){
+                var request = new XMLHttpRequest();
+                request.open('GET', 'people.txt', true);
+                request.onload = function() {
+                  if (request.status >= 200 && request.status < 400) {
+                    var data = request.responseText.split('\n').filter(function(x){
+                        return x
+                    })
+                    this.users = data
+                    this.update()
+                        console.log(data)
+                  } else {
+                    alert('Fail to load the peoples')
+                  }
+                }.bind(this);
+                request.onerror = function() {
+                  alert('Fail to load the peoples')
+                };
+                request.send();
+            }.bind(this))
+            randomCurrent(){
+                var num = Math.floor(Math.random() * this.users.length)  // [0, length)
+                this.current = this.users[num];
+                console.log('randomUser', this.current, num)
+                this.update()
+            }
+            remove (e){
+                e.currentTarget.className += " hide"
+                e.preventUpdate = true;
+                setTimeout(function(){
+                    var no = this.users.indexOf(e.item.name)
+                    this.users.splice(no, 1)
+                    this.update()
+                    console.log('delete the user', e.item.name);
+                    [].forEach.call(document.querySelectorAll('.hide'), function(x){
+                        x.classList.remove('hide')
+                    })
+                }.bind(this), 400)
+            }
+            add(e){
+                var name = prompt("Name");
+                this.users.push(name)
+            }
+            start(e){
+                this.status = 'playing'
+                console.log(this.timer)
+                if(!this.timer){
+                    this.random_time = 1;
+                    this.editing = false;
+                    this.timer = setInterval(function(){
+                        this.randomCurrent()
+                        this.random_time += 1;
+                        this.update()
+                        if(this.random_time >= 20){
+                            this.status = 'finished'
+                            console.log('enough!')
+                            clearInterval(this.timer)
+                            this.timer = undefined
+                            this.finished = true;
+                            this.update()
+                        }
+                    }.bind(this), 150)
+                }else{
+                    console.log('You Bad Bad')
+                }
+            }
+        </random>
+    </script>
+    <script>riot.mount('*')</script>
+    <script>
+        var svg = document.getElementsByTagName('svg')[0];
+        var round = 30,
+            size = (window.innerHeight > window.innerWidth ? window.innerHeight : window.innerWidth) * 2,
+            r = Math.sqrt(2) / 2 * size / Math.cos(Math.PI / round);
+        console.log(size);
+        svg.innerHTML = "";
+        svg.setAttribute('height', size)
+        svg.setAttribute('width', size)
+        svg.setAttribute('viewBox', "0 0 " +  size + ' ' + size)
+        var start = Math.random(),
+            color1 = "#F39C12",
+            color2 = "#F5AB35";
+        for(var i = 0; i < round; i++){
+            var radius = i / round * 2 * Math.PI + start;
+            var x = Math.sin(radius)*r + size / 2;
+            var y = Math.cos(radius)*r + size / 2;
+            var radius = (i+1) / round * 2 * Math.PI + start;
+            var x_ = Math.sin(radius)*r + size / 2;
+            var y_ = Math.cos(radius)*r + size / 2;
+            svg.innerHTML += '<path d="M '+size/2+' ' + size/2 + ' L ' + x + ' ' + y + ' L ' + x_ + ' ' + y_ +  '" fill="'+ (i%2?color1:color2) +'" stroke="none"/>';
+        }
+    </script>
+</body>
+</html>
